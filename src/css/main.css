@@ -7,7 +7,7 @@
 
 body {
     overflow: hidden;          /* 禁止页面滚动 */
-    background-color: #000;    /* 黑色背景 */
+    background-color: #fff;    /* 黑色背景 */
 }
 
 #app {
