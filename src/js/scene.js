@@ -35,7 +35,7 @@ export class SceneManager {
 
         const loader = new FBXLoader();
         loader.load(
-            '/assets/audi.fbx', // FBX 文件路径
+            './assets/audi.fbx', // FBX 文件路径
             (fbx) => {
                 console.log('FBX 模型加载成功', fbx);
 
