@@ -49,7 +49,6 @@ yarn-error.log*
 # ================================
 
 # 前端构建输出
-dist/
 build/
 out/
 .next/       # Next.js
