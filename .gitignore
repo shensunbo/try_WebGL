@@ -1,0 +1,94 @@
+# ================================
+# 通用开发环境文件
+# ================================
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.log
+
+# IDE/编辑器配置文件
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ================================
+# Node.js 相关
+# ================================
+
+# 依赖目录
+node_modules/
+**/node_modules/
+
+# npm/yarn 日志
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# 包管理器的锁文件（根据项目选择保留一个）
+# package-lock.json   # 如果使用 npm
+# yarn.lock          # 如果使用 yarn
+# pnpm-lock.yaml     # 如果使用 pnpm
+
+# 本地开发环境变量
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# ================================
+# 构建/编译输出
+# ================================
+
+# 前端构建输出
+dist/
+build/
+out/
+.next/       # Next.js
+.nuxt/       # Nuxt.js
+.cache/      # Gatsby/Vite
+.turbo/      # Turborepo
+
+# TypeScript 编译输出
+*.js.map
+*.d.ts
+*.tsbuildinfo
+
+# ================================
+# 测试/覆盖率报告
+# ================================
+
+# 测试运行产生的文件
+coverage/
+.nyc_output/
+jest-report/
+*.lcov
+
+# ================================
+# 前端框架特定文件
+# ================================
+
+# React/Vue/Angular 缓存文件
+.history/
+.parcel-cache/
+.svelte-kit/
+
+# ================================
+# 其他
+# ================================
+
+# 本地调试文件
+debug/
+dump.rdb
+
+# 日志文件
+logs/
+*.log

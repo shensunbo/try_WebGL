@@ -1,0 +1,16 @@
+/* 重置默认样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;          /* 禁止页面滚动 */
+    background-color: #000;    /* 黑色背景 */
+}
+
+#app {
+    width: 100vw;
+    height: 100vh;
+}

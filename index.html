@@ -1,55 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>最简单的 Three.js Demo</title>
-    <style>
-        body { margin: 0; overflow: hidden; }
-        canvas { display: block; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Three.js Demo</title>
+    <link rel="stylesheet" href="/src/css/main.css">
 </head>
 <body>
-    <!-- Three.js 渲染的画布会自动插入到这里 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script>
-        // 1. 创建场景（Scene）
-        const scene = new THREE.Scene();
-        
-        // 2. 创建相机（Camera）
-        const camera = new THREE.PerspectiveCamera(
-            75,                                   // 视野角度（FOV）
-            window.innerWidth / window.innerHeight, // 宽高比
-            0.1,                                  // 近裁剪面
-            1000                                  // 远裁剪面
-        );
-        camera.position.z = 5;                    // 相机位置（沿Z轴后退5个单位）
-
-        // 3. 创建渲染器（Renderer）
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight); // 设置渲染尺寸
-        document.body.appendChild(renderer.domElement);          // 将画布添加到页面
-
-        // 4. 创建立方体（BoxGeometry + MeshBasicMaterial）
-        const geometry = new THREE.BoxGeometry(1, 1, 1);          // 立方体几何体
-        const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // 绿色材质
-        const cube = new THREE.Mesh(geometry, material);         // 创建网格对象
-        scene.add(cube);                                         // 将立方体添加到场景
-
-        // 5. 动画循环（让立方体旋转）
-        function animate() {
-            requestAnimationFrame(animate);                      // 循环调用自身
-            cube.rotation.x += 0.01;                             // X轴旋转
-            cube.rotation.y += 0.01;                             // Y轴旋转
-            renderer.render(scene, camera);                      // 渲染场景
-        }
-        animate();
-
-        // 6. 响应窗口大小变化
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-    </script>
+    <div id="app"></div>
+    <script type="module" src="/src/index.js"></script>
 </body>
 </html>
