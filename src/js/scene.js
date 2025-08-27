@@ -23,41 +23,117 @@ export class SceneManager {
 
         this.scene.background = new THREE.Color(0xffffff);
 
-        const ambientLight = new THREE.AmbientLight(0x404040);
-        this.scene.add(ambientLight);
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(1, 1, 1);
-        this.scene.add(directionalLight);
+        // 设置光照
+        this.setupLights();
 
+        // 设置控制器
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
 
-        // const textureLoader = new THREE.TextureLoader();
+        // 创建材质
+        this.createMaterials();
 
-        // const chestMat = new THREE.MeshStandardMaterial({
-        //     map: textureLoader.load('./assets/halo/textures/Spartan_Chest_Mat_BaseColor.png'),     
-        //     normalMap: textureLoader.load('./assets/halo/textures/Spartan_Chest_Mat_Normal.png')
-        // });
+        // 加载模型
+        this.loadModel();
 
+        // 窗口大小自适应
+        window.addEventListener('resize', this.onWindowResize.bind(this));
+    }
 
+    setupLights() {
+        // const ambientLight = new THREE.AmbientLight(0x404040);
+        // this.scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+        directionalLight.position.set(0, 10, 10);
+        this.scene.add(directionalLight);
+    }
+
+    createMaterials() {
+        const textureLoader = new THREE.TextureLoader();
+        
+        // 定义材质配置
+        const materialConfigs = {
+            'chest_Mat': {
+                map: './assets/halo/textures/Spartan_Chest_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Chest_Mat_Normal.png',
+                aoMap: './assets/halo/textures/Spartan_Chest_Mat_AO.png',
+                roughnessMap: './assets/halo/textures/Spartan_Chest_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Chest_Mat_Metallic.png'
+            },
+            'arms_Mat': {
+                map: './assets/halo/textures/Spartan_Arms_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Arms_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/Spartan_Arms_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Arms_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/Spartan_Legs_Mat_AO.png'
+            },
+            'Spartan_Legs_Mat': {
+                map: './assets/halo/textures/Spartan_Legs_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Legs_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/Spartan_Legs_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Legs_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/Spartan_Legs_Mat_AO.png'
+            },
+            'Spartan_Shoulders_Mat': {
+                map: './assets/halo/textures/ODST_Shoulder_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/ODST_Shoulder_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/ODST_Shoulder_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/ODST_Shoulder_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/ODST_Shoulder_Mat_AO.png'
+            },
+            'Spartan_Helmet_Mat': {
+                map: './assets/halo/textures/Spartan_Helmet_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Helmet_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/Spartan_Helmet_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Helmet_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/Spartan_Helmet_Mat_AO.png'
+
+            },
+            'Spartan_Undersuit_Mat': {
+                map: './assets/halo/textures/Spartan_Undersuit_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Undersuit_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/Spartan_Undersuit_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Undersuit_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/Spartan_Undersuit_Mat_AO.png'
+            },
+            'Spartan_Ear_Mat': {
+                map: './assets/halo/textures/Spartan_Ears_Mat_BaseColor.png',
+                normalMap: './assets/halo/textures/Spartan_Ears_Mat_Normal.png',
+                roughnessMap: './assets/halo/textures/Spartan_Ears_Mat_Roughness.png',
+                metalnessMap: './assets/halo/textures/Spartan_Ears_Mat_Metallic.png',
+                aoMap: './assets/halo/textures/Spartan_Ears_Mat_AO.png'
+            }
+        };
+
+        // 创建材质映射
+        this.materialMap = {};
+        for (const [matName, config] of Object.entries(materialConfigs)) {
+            this.materialMap[matName] = new THREE.MeshStandardMaterial({
+                map: textureLoader.load(config.map),
+                normalMap: textureLoader.load(config.normalMap),
+                roughnessMap: textureLoader.load(config.roughnessMap),
+                metalnessMap: textureLoader.load(config.metalnessMap),
+                aoMap: textureLoader.load(config.aoMap),
+            });
+        }
+    }
+
+    loadModel() {
         const loader = new FBXLoader();
         loader.load(
-            './assets/halo/textures/halo.fbx', // FBX 文件路径
+            './assets/halo/textures/halo.fbx',
             (fbx) => {
                 console.log('FBX 模型加载成功', fbx);
 
-                // 调整模型位置/缩放（可选）
+                // 调整模型位置/缩放
                 fbx.scale.set(0.1, 0.1, 0.1);
                 fbx.position.set(0, 0, 0);
 
-                // fbx.traverse((child) => {
-                //     if (child.isMesh && child.material.name === 'chest_Mat') {
-                //         child.material = chestMat;
-                //         child.material.needsUpdate = true;
-                //     }
-                // });
+                // 应用材质
+                this.applyMaterials(fbx);
 
-                // 添加到场景ds
+                // 添加到场景
                 this.scene.add(fbx);
             },
             (progress) => {
@@ -67,29 +143,36 @@ export class SceneManager {
                 console.error('FBX 加载失败:', error);
             }
         );
-
-        // const loader = new GLTFLoader();
-        //     loader.load('./assets/halo/textures/halo.glb', (gltf) => {
-        //         this.scene.add(gltf.scene);
-        // });
-
-        // 窗口大小自适应
-        window.addEventListener('resize', this.onWindowResize.bind(this));
     }
 
+    applyMaterials(object) {
+        object.traverse((child) => {
+            if (child.isMesh) {
+                // 处理材质数组或单个材质
+                if (Array.isArray(child.material)) {
+                    child.material = child.material.map((material) => {
+                        if (material && this.materialMap[material.name]) {
+                            return this.materialMap[material.name];
+                        }
+                        return material;
+                    });
+                } else if (child.material && this.materialMap[child.material.name]) {
+                    child.material = this.materialMap[child.material.name];
+                }
+                
+                // 确保材质更新
+                if (child.material) {
+                    child.material.needsUpdate = true;
+                }
+            }
+        });
+    }
 
     onWindowResize() {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
-
-    // animate() {
-    //     requestAnimationFrame(this.animate.bind(this));
-    //     this.cube.rotation.x += 0.01;
-    //     this.cube.rotation.y += 0.01;
-    //     this.renderer.render(this.scene, this.camera);
-    // }
 
     animate() {
         requestAnimationFrame(this.animate.bind(this));
