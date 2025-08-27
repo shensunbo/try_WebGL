@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { CubeTextureLoader } from 'three';
 
 export class SceneManager {
     constructor(container) {
@@ -14,14 +15,16 @@ export class SceneManager {
             3000
         );
 
-        this.camera.position.set(0, 500, 30);
+        this.camera.position.set(0, 50, 500);
         this.camera.lookAt(0, 0, 0);
         
         this.renderer = new THREE.WebGLRenderer({ antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         container.appendChild(this.renderer.domElement);
 
-        this.scene.background = new THREE.Color(0xffffff);
+        this.loadSkybox();
+
+        // this.scene.background = new THREE.Color(0xffffff);
 
         // 设置光照
         this.setupLights();
@@ -40,13 +43,44 @@ export class SceneManager {
         window.addEventListener('resize', this.onWindowResize.bind(this));
     }
 
+    loadSkybox() {
+        const loader = new CubeTextureLoader();
+        
+        const skyboxTextures = [
+            './assets/halo/skybox/px.png', // right
+            './assets/halo/skybox/nx.png', // left
+            './assets/halo/skybox/py.png', // top
+            './assets/halo/skybox/ny.png', // bottom
+            './assets/halo/skybox/pz.png', // back
+            './assets/halo/skybox/nz.png'  // front
+        ];
+        
+        loader.load(skyboxTextures, (texture) => {
+            this.scene.background = texture; 
+            this.scene.environment = texture;
+        }, undefined, (error) => {
+            console.error('load skybox error:', error);
+            this.scene.background = new THREE.Color(0x87CEEB);
+        });
+    }
+
     setupLights() {
         // const ambientLight = new THREE.AmbientLight(0x404040);
         // this.scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
-        directionalLight.position.set(0, 10, 10);
-        this.scene.add(directionalLight);
+        // const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        // directionalLight.position.set(0, 0, 10);
+        // this.scene.add(directionalLight);
+
+        const pointLight = new THREE.PointLight(0xffffff, 1.5);
+        pointLight.position.set(0, 1000, 1000);
+
+        const rimPointLight = new THREE.PointLight(0xffffff, 0.8);
+        rimPointLight.position.set(0, 500, -1000);
+
+
+        this.scene.add(pointLight)
+        this.scene.add(rimPointLight)
     }
 
     createMaterials() {
@@ -127,8 +161,9 @@ export class SceneManager {
                 console.log('FBX 模型加载成功', fbx);
 
                 // 调整模型位置/缩放
-                fbx.scale.set(0.1, 0.1, 0.1);
-                fbx.position.set(0, 0, 0);
+                fbx.scale.set(0.05, 0.05, 0.05);
+                fbx.position.set(0, -400, -100);
+                fbx.rotateOnAxis(new THREE.Vector3(1, 0, 0), Math.PI / 2)
 
                 // 应用材质
                 this.applyMaterials(fbx);

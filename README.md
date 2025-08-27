@@ -7,6 +7,10 @@ three.js
     * npm run build
     * npm run preview
 
+# current status
+1. add skybox
+![skybox](public/res/skybox.png)  
+
 # issue
 - [ ] blender 导出GLB 文件可以正常加载，但GLB文件太大了
 ![halo glb](public/res/halo.png)
